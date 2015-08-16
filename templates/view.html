@@ -1,13 +1,19 @@
 <section id="view-wifi">
   <div class="header">
-    <div class="back-button btn"><a href="/">back</a></div>
+    <div class="button"><a href="/">back</a></div>
   </div>
   <div class="content">
     {{name}}
-    <ul class="passwords">
-      {{#each passwords}}
-        <li>{{this}}<div on-click="copy(this)">copy</div></li>
-      {{/each}}
-    </ul>
+    <table class="u-full-width passwords">
+      <thead></thead>
+      <tbody>
+        {{#each passwords}}
+        <tr>
+          <td>{{this}}</td>
+          <td><a class="button" on-click="copy(this)">copy</a></td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
   </div>
 </section>

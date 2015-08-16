@@ -1,8 +1,15 @@
 var thanks = require('./')
 var path = require('path')
+var memdb = require('memdb')
 var Ractive = require('ractive')
+var copyPaste = require('copy-paste')
+var wifiPassword = require('wifi-password')
+var wifiName = require('wifi-name')
+var wifiList = require('wifi-list')
 var page = require('page')
 var fs = require('fs')
+
+var db = thanks(memdb())
 
 // Throw unhandled javascript errors
 window.onerror = function errorHandler (message, url, lineNumber) {
@@ -15,7 +22,29 @@ var templates = {
   view: fs.readFileSync(path.join(__dirname, 'templates/view.html')).toString(),
 }
 
-var state = {}
+var events = {
+  share: function () {
+    var ractive = this
+    wifiName(function (err, name) {
+      if (err) return throwError(err)
+      wifiPassword(function (err, password) {
+        if (err.message === 'Your network doesn\'t have a password') return alert(err.message)
+        if (err) return throwError(err)
+        db.add(name, password, function (err) {
+          if (err) return throwError(err)
+          console.log('shared wifi', name, password)
+        })
+      })
+    })
+  },
+  quit: function () {
+  },
+  copy: function (event, password) {
+    copyPaste(password, function () {
+      alert('Copied password ' + password + ' to clipboard.')
+    })
+  }
+}
 
 var routes = {
   main: function (ctx, next) {
@@ -23,34 +52,35 @@ var routes = {
     ctx.onrender = function () {
       console.log('i am here')
     }
-    db.getAll(function (err, wifis) {
-      if (err) return throwError(err, next)
-      ctx.data = {wifis: data, hasWifis: wifis.length > 0}
-      next()
+    wifiList(function (err, wifis) {
+      if (err) return throwError(err)
+      ctx.data = {wifis: wifis}
+      console.log(wifis)
+      render(ctx)
     })
   },
   view: function (ctx, next) {
     ctx.template = templates.view
-
-    db.get(ctx.params.id, function (err, wifi) {
+    db.get(ctx.params.essid, function (err, passwords) {
       if (err) return throwError(err, next)
-      ctx.data.wifi = wifi
-      next()
-    }
+      var wifi = {
+        essid: ctx.params.essid,
+        passwords: passwords,
+        hasOnePassword: passwords.length === 1
+      }
+      ctx.data = {wifi: wifi}
+      render(ctx)
+    })
   }
-  // about: function about (ctx, next) {
-  //   ctx.template = templates.about
-  //   state.about = render(ctx, {})
-  // }
 }
 
 // set up routes
 page('/', routes.main)
-page('/view/:id', routes.view)
-//page('/about', routes.about)
+page('/view/:essid', routes.view)
 
-page('*', render)
-
+// initialize
+page.start()
+page('/')
 
 function render (ctx) {
   var ract = new Ractive({
@@ -63,7 +93,6 @@ function render (ctx) {
   ract.on(events)
   return ract
 }
-
 
 function throwError (error) {
   var message = error.stack || error.message || JSON.stringify(error)

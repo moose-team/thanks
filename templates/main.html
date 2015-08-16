@@ -1,14 +1,25 @@
-
 <section id="main">
-  <div class="header">
-    <div class="share-button btn">share your wifi</div>
-    <div class="btn" on-click="">quit</div>
+  <div class="row header">
+    <a class="button" on-click="quit">quit</a>
+    <a class="share button button-primary u-pull-right" on-click="share">share your wifi</a>
   </div>
-  <div class="content">
-    <ul class="wifis">
-      {{#each wifis}}
-      <li><a href='/view/{{this.id}}'>{{this.name}}</a></li>"
-      {{/each}}
-    </ul>
+  <div class="row content">
+    <table class="u-full-width passwords">
+      <thead>
+        <td><img src="/img/lock.png" />unlocked wifis</td>
+      </thead>
+      <tbody>
+        {{#each wifis}}
+        <tr>
+          {{#if this.hasOnePassword}}
+            <td on-click="copy:{{this.password}}">{{this.name}}</td>
+            <td>{{this.security}}</td>
+          {{else}}
+            <td><a href="/view/{{this.name}}">{{this.name}}</a></td>
+          {{/if}}
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
   </div>
 </section>
