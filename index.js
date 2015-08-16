@@ -67,7 +67,7 @@ module.exports = function (db) {
     log.append({essid: essid, password: password}, cb)
   }
 
-  that.createStream = function (opts) {
+  that.replicate = function (opts) {
     return log.replicate({live: true})
   }
 
