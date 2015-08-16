@@ -36,7 +36,6 @@ var events = {
         }
         db.add(name, password, function (err) {
           if (err) return throwError(err)
-          console.log('shared wifi', name, password)
         })
       })
     })
@@ -54,9 +53,6 @@ var events = {
 var routes = {
   main: function (ctx, next) {
     ctx.template = templates.main
-    ctx.onrender = function () {
-      console.log('i am here')
-    }
     ctx.data = {loading: true}
     render(ctx)
     wifiList(db, function (err, wifis) {
