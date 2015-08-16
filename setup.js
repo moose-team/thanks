@@ -42,6 +42,7 @@ var events = {
     })
   },
   quit: function () {
+    ipc.send('terminate')
   },
   copy: function (event, password) {
     copyPaste(password, function () {
