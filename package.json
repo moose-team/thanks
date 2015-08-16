@@ -3,8 +3,16 @@
   "version": "0.0.0",
   "description": "WIP - nothing to see here",
   "main": "index.js",
-  "dependencies": {},
-  "devDependencies": {},
+  "dependencies": {
+    "hyperlog": "^4.5.0",
+    "protocol-buffers": "^3.1.2"
+  },
+  "devDependencies": {
+    "standard": "^5.1.0"
+  },
+  "scripts": {
+    "test": "standard"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/mafintosh/thanks.git"
