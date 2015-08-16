@@ -5,10 +5,10 @@ var Ractive = require('ractive')
 var copyPaste = require('copy-paste')
 var wifiPassword = require('wifi-password')
 var wifiName = require('wifi-name')
-var wifiList = require('wifi-list')
 var page = require('page')
 var fs = require('fs')
 
+var wifiList = require('./lib/wifis.js')
 var db = thanks(memdb())
 
 // Throw unhandled javascript errors
@@ -52,7 +52,7 @@ var routes = {
     ctx.onrender = function () {
       console.log('i am here')
     }
-    wifiList(function (err, wifis) {
+    wifiList(db, function (err, wifis) {
       if (err) return throwError(err)
       ctx.data = {wifis: wifis}
       console.log(wifis)
