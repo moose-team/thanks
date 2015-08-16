@@ -1,6 +1,6 @@
 var thanks = require('./')
 var path = require('path')
-var memdb = require('memdb')
+var level = require('level')
 var Ractive = require('ractive')
 var copyPaste = require('copy-paste')
 var wifiPassword = require('wifi-password')
@@ -9,7 +9,7 @@ var page = require('page')
 var fs = require('fs')
 
 var wifiList = require('./lib/wifis.js')
-var db = thanks(memdb())
+var db = thanks(level(__dirname + '/db'))
 
 // Throw unhandled javascript errors
 window.onerror = function errorHandler (message, url, lineNumber) {
