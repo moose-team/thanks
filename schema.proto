@@ -1,5 +1,4 @@
 message Wifi {
   required string essid = 1;
-  required bytes bssid = 2;
-  required string password = 3;
+  optional string password = 2;
 }
