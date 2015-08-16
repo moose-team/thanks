@@ -26,14 +26,15 @@
     "memdb": "^1.0.1",
     "standard": "^3.2.1",
     "electron-packager": "^4.0.0",
-    "electron-prebuilt": "^0.26.0",
+    "electron-prebuilt": "^0.30.4",
     "publish-release": "^1.0.1"
   },
   "scripts": {
     "test": "standard",
     "app": "electron app.js",
     "build": "electron-packager app.js Thanks --platform=darwin --arch=x64 --version=0.30.1 --ignore='node_modules/electron-(packager|prebuild)'",
-    "publish": "publish-release --template notes.md --assets Thanks.zip"
+    "publish": "publish-release --template notes.md --assets Thanks.zip",
+    "rebuild-leveldb": "cd node_modules/level/node_modules/leveldown && set HOME=~/.electron-gyp && node-gyp rebuild --target=0.30.4 --arch=x64 --dist-url=https://atom.io/download/atom-shell"
   },
   "repository": {
     "type": "git",
