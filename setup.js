@@ -28,8 +28,10 @@ var events = {
     wifiName(function (err, name) {
       if (err) return throwError(err)
       wifiPassword(function (err, password) {
-        if (err.message === 'Your network doesn\'t have a password') return alert(err.message)
-        if (err) return throwError(err)
+        if (err) {
+          if (err.message === 'Your network doesn\'t have a password') return alert(err.message)
+          return throwError(err)
+        }
         db.add(name, password, function (err) {
           if (err) return throwError(err)
           console.log('shared wifi', name, password)
