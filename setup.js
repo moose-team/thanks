@@ -7,6 +7,7 @@ var wifiPassword = require('wifi-password')
 var wifiName = require('wifi-name')
 var page = require('page')
 var fs = require('fs')
+var ipc = require('ipc')
 
 var wifiList = require('./lib/wifis.js')
 var db = thanks(level(__dirname + '/db'))
@@ -20,6 +21,7 @@ window.onerror = function errorHandler (message, url, lineNumber) {
 var templates = {
   main: fs.readFileSync(path.join(__dirname, 'templates/main.html')).toString(),
   view: fs.readFileSync(path.join(__dirname, 'templates/view.html')).toString(),
+  about: fs.readFileSync(path.join(__dirname, 'templates/about.html')).toString()
 }
 
 var events = {
@@ -54,6 +56,8 @@ var routes = {
     ctx.onrender = function () {
       console.log('i am here')
     }
+    ctx.data = {loading: true}
+    render(ctx)
     wifiList(db, function (err, wifis) {
       if (err) return throwError(err)
       ctx.data = {wifis: wifis}
@@ -73,12 +77,17 @@ var routes = {
       ctx.data = {wifi: wifi}
       render(ctx)
     })
+  },
+  about: function (ctx, next) {
+    ctx.template = templates.about
+    render(ctx)
   }
 }
 
 // set up routes
 page('/', routes.main)
 page('/view/:essid', routes.view)
+page('/about', routes.about)
 
 // initialize
 page.start()

@@ -1,9 +1,15 @@
 <section id="main">
   <div class="row header">
-    <a class="button" on-click="quit">quit</a>
-    <a class="share button button-primary u-pull-right" on-click="share">share your wifi</a>
+    <a class="share button button-primary" on-click="share">share</a>
+
+    <a class="button " href="/about">?</a>
+    <a class="button u-pull-right" on-click="quit">x</a>
+
   </div>
   <div class="row content">
+    {{#if loading}}
+      loading...
+    {{else}}
     <table class="u-full-width passwords">
       <thead>
         <td>Unlocked wifis:</td>
@@ -21,5 +27,6 @@
         {{/each}}
       </tbody>
     </table>
+    {{/if}}
   </div>
 </section>
