@@ -1,0 +1,14 @@
+
+<section id="main">
+  <div class="header">
+    <div class="share-button btn">share your wifi</div>
+    <div class="btn" on-click="">quit</div>
+  </div>
+  <div class="content">
+    <ul class="wifis">
+      {{#each wifis}}
+      <li><a href='/view/{{this.id}}'>{{this.name}}</a></li>"
+      {{/each}}
+    </ul>
+  </div>
+</section>

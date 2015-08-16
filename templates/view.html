@@ -1,0 +1,13 @@
+<section id="view-wifi">
+  <div class="header">
+    <div class="back-button btn"><a href="/">back</a></div>
+  </div>
+  <div class="content">
+    {{name}}
+    <ul class="passwords">
+      {{#each passwords}}
+        <li>{{this}}<div on-click="copy(this)">copy</div></li>
+      {{/each}}
+    </ul>
+  </div>
+</section>
