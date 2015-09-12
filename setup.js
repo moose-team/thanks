@@ -8,9 +8,30 @@ var wifiName = require('wifi-name')
 var page = require('page')
 var fs = require('fs')
 var ipc = require('ipc')
+var signalhub = require('signalhub')
+var webrtcSwarm = require('webrtc-swarm')
 
 var wifiList = require('./lib/wifis.js')
-var db = thanks(level(__dirname + '/db'))
+var db = thanks(require('memdb')())
+
+var hub = signalhub('thanks', [
+  'https://instant.io:8080'
+])
+
+var sw = webrtcSwarm(hub)
+
+sw.on('peer', function (peer, id) {
+  console.log('connected to a new peer: ' + id)
+  console.log('total peers: ' + sw.peers.length)
+  peer.on('close', function () {
+    console.log('peer close ' + id)
+  })
+  var s = db.replicate()
+  s.pipe(peer).pipe(s)
+  s.on('end', function () {
+    console.log('replication with ' + id + ' ended')
+  })
+})
 
 // Throw unhandled javascript errors
 window.onerror = function errorHandler (message, url, lineNumber) {
@@ -103,7 +124,7 @@ function render (ctx) {
 }
 
 function throwError (error) {
-  var message = error.stack || error.message || JSON.stringify(error)
+  var message = error.message || JSON.stringify(error)
   console.error(message)
   window.alert(message)
 }
